@@ -33,52 +33,36 @@ body.bg-arquivo { background: #9b59b6; }
 
 h1, h2 { text-align: center; color: #2c3e50; }
 
-.menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 20px; }
+.menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; padding: 20px; }
 
 .btn-menu { 
     height: 150px; border: none; border-radius: 20px; color: white; 
-    font-weight: bold; font-size: 20px; /* Aumentado conforme pedido */
+    font-weight: bold; font-size: 22px; 
     cursor: pointer; transition: transform 0.2s;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
 .btn-menu:hover { transform: scale(1.05); }
 
-/* GRID DO FORMULÁRIO */
-.form-linha {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr); /* Sistema de 12 colunas */
-    gap: 15px;
-    margin-bottom: 15px;
-}
-
+.form-linha { display: grid; grid-template-columns: repeat(12, 1fr); gap: 15px; margin-bottom: 15px; }
 .col-3 { grid-column: span 3; }
 .col-4 { grid-column: span 4; }
-.col-5 { grid-column: span 5; }
 .col-6 { grid-column: span 6; }
 .col-9 { grid-column: span 9; }
 .col-12 { grid-column: span 12; }
 
 label { display: block; margin-bottom: 5px; font-weight: bold; color: #34495e; }
-
-input, select { 
-    width: 100% !important; height: 48px; padding: 10px; 
-    border: 2px solid #ddd; border-radius: 8px; font-size: 16px;
-}
+input, select { width: 100%; height: 48px; padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; }
 
 .btn-acao { 
     width: 100%; padding: 16px; border: none; border-radius: 10px; 
     color: white; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 18px;
 }
 
-.barra-ferramentas { display: flex; gap: 15px; margin-bottom: 20px; }
-.btn-ferramenta { flex: 1; padding: 20px; font-weight: bold; border: none; border-radius: 12px; cursor: pointer; color: white; }
-
 .card-clicavel, .card-consulta { 
     background: #fff; padding: 15px; border-radius: 10px; margin-bottom: 10px; 
     border-left: 10px solid #2c3e50; display: flex; justify-content: space-between; align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer;
 }
-.card-clicavel { cursor: pointer; }
 
 .verde { background: var(--grad-verde); }
 .laranja { background: var(--grad-laranja); }
