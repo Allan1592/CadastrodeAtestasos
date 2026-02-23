@@ -1,66 +1,100 @@
-let db = JSON.parse(localStorage.getItem('meu_sistema_db')) || [];
+// Usando um padrão mais rigoroso para evitar bloqueios de segurança
+"use strict";
+
+let db = [];
+
+// Função para carregar dados de forma segura
+function carregarDados() {
+    const dadosSalvos = localStorage.getItem('meu_sistema_db');
+    if (dadosSalvos) {
+        try {
+            db = JSON.parse(dadosSalvos);
+        } catch (e) {
+            console.error("Erro ao carregar banco de dados");
+            db = [];
+        }
+    }
+}
 
 function salvarNoStorage() {
     localStorage.setItem('meu_sistema_db', JSON.stringify(db));
 }
 
 function irPara(idTela) {
-    document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
-    document.getElementById(idTela).classList.add('ativa');
+    const telas = document.querySelectorAll('.tela');
+    telas.forEach(t => t.style.display = 'none');
+    
+    const telaAtiva = document.getElementById(idTela);
+    if (telaAtiva) {
+        telaAtiva.style.display = 'block';
+    }
+
     if(idTela === 'telaBanco') listarBanco();
-    if(idTela === 'telaArquivo') listarArquivoMorto();
 }
+
+// Inicializa os dados assim que o script carrega
+carregarDados();
 
 function salvarNovo() {
     const nome = document.getElementById('regNome').value;
     const mat = document.getElementById('regMatricula').value;
-    if(!nome || !mat) return alert("Preencha Nome e Matrícula!");
+    const sol = document.getElementById('regSolicitante').value;
+    const data = document.getElementById('regDataPedido').value;
 
-    db.push({
+    if(!nome || !mat) {
+        alert("Preencha Nome e Matrícula!");
+        return;
+    }
+
+    const novoRegistro = {
         id: Date.now(),
         nome: nome,
         matricula: mat,
-        solicitante: document.getElementById('regSolicitante').value,
-        dataPedido: document.getElementById('regDataPedido').value,
-        grade: "", dataEnvio: "", ativo: true
-    });
+        solicitante: sol,
+        dataPedido: data,
+        grade: "", 
+        dataEnvio: "", 
+        ativo: true
+    };
+
+    db.push(novoRegistro);
     salvarNoStorage();
-    alert("Cadastrado!");
+    alert("Cadastrado com sucesso!");
+    
+    // Limpar campos
+    document.getElementById('regNome').value = "";
+    document.getElementById('regMatricula').value = "";
+    
     irPara('menuPrincipal');
 }
 
 function listarBanco() {
     const area = document.getElementById('listaBanco');
+    if (!area) return;
     area.innerHTML = "";
-    db.filter(r => r.ativo).forEach(r => {
-        area.innerHTML += `
-            <div class="card">
-                <strong>${r.nome.toUpperCase()}</strong><br>
-                <small>Mat: ${r.matricula}</small><br>
-                <button class="btn-acao azul" style="padding:5px; height:auto; margin-top:5px" onclick="abrirEdicao(${r.id})">EDITAR</button>
-            </div>`;
+    
+    const ativos = db.filter(r => r.ativo);
+    
+    if(ativos.length === 0) {
+        area.innerHTML = "<p>Nenhum registro encontrado.</p>";
+        return;
+    }
+
+    ativos.forEach(r => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <strong>${r.nome.toUpperCase()}</strong><br>
+            <small>Matrícula: ${r.matricula}</small><br>
+            <button class="btn-acao azul" style="padding:5px; height:auto; margin-top:5px">EDITAR</button>
+        `;
+        // Adicionando o clique de forma segura sem usar onclick no HTML (que às vezes causa o erro de CSP)
+        card.querySelector('button').addEventListener('click', () => abrirEdicao(r.id));
+        area.appendChild(card);
     });
 }
 
-function abrirEdicao(id) {
-    const r = db.find(x => x.id === id);
-    document.getElementById('editId').value = r.id;
-    document.getElementById('editNome').value = r.nome;
-    document.getElementById('editGrade').value = r.grade;
-    document.getElementById('editDataEnvio').value = r.dataEnvio;
-    irPara('telaEditar');
-}
-
-function salvarEdicao() {
-    const id = document.getElementById('editId').value;
-    const r = db.find(x => x.id == id);
-    r.grade = document.getElementById('editGrade').value;
-    r.dataEnvio = document.getElementById('editDataEnvio').value;
-    salvarNoStorage();
-    alert("Atualizado!");
-    irPara('menuPrincipal');
-}
-
+// Funções de Backup
 function exportarBackup() {
     const data = JSON.stringify(db);
     const blob = new Blob([data], {type: "application/json"});
@@ -71,21 +105,24 @@ function exportarBackup() {
 }
 
 function importarBackup(event) {
+    const file = event.target.files[0];
+    if (!file) return;
     const reader = new FileReader();
     reader.onload = (e) => {
-        db = JSON.parse(e.target.result);
-        salvarNoStorage();
-        alert("Backup Carregado!");
-        irPara('menuPrincipal');
+        try {
+            db = JSON.parse(e.target.result);
+            salvarNoStorage();
+            alert("Backup Carregado!");
+            irPara('menuPrincipal');
+        } catch(err) {
+            alert("Erro ao ler arquivo.");
+        }
     };
-    reader.readAsText(event.target.files[0]);
+    reader.readAsText(file);
 }
 
-function excluirRegistro() {
-    if(confirm("Mover para o Arquivo?")) {
-        const id = document.getElementById('editId').value;
-        db.find(x => x.id == id).ativo = false;
-        salvarNoStorage();
-        irPara('menuPrincipal');
-    }
-}
+// Tornando as funções globais para o HTML conseguir ver (necessário no GitHub Pages)
+window.irPara = irPara;
+window.salvarNovo = salvarNovo;
+window.exportarBackup = exportarBackup;
+window.importarBackup = importarBackup;
