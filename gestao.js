@@ -1,6 +1,6 @@
 "use strict";
 
-const SCRIPT_URL = "SUA_URL_AQUI"; // <--- COLE SUA URL ENTRE AS ASPAS
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbysCKXOu7tROsuyfsH2LF-FUxaUJ4gTBJ3ohECeOjBZzweOU1Q3NU72Y4khHPOInQSD/exec"; // <--- COLE SUA URL ENTRE AS ASPAS
 const UNIDADE_NOME = "UNIDADE_01"; // Identifica de onde veio o dado
 
 let db = [];
