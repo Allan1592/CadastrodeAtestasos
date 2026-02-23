@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão Digital v2</title>
+    <title>Controle de Atestados</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-menu">
 
 <div class="container">
     <div id="menuPrincipal" class="tela ativa">
-       <h1 style="margin-bottom: 5px;">Controle de Atestados</h1>
-<p style="text-align: center; color: #7f8c8d; opacity: 0.8; font-size: 0.9em; margin-top: 0; margin-bottom: 30px;">
-    Cadastro e gestão de atestados para fins de remição.
-</p>
+        <h1 style="margin-bottom: 5px;">Controle de Atestados</h1>
+        <p style="text-align: center; color: #7f8c8d; opacity: 0.8; font-size: 0.9em; margin-top: 0; margin-bottom: 30px;">
+            Cadastro e gestão de atestados para fins de remição.
+        </p>
         <div class="menu-grid">
             <button class="btn-menu verde" onclick="irPara('telaCadastrar')">📝 Cadastrar</button>
             <button class="btn-menu laranja" onclick="irPara('telaPesquisar')">🔍 Pesquisar</button>
@@ -24,16 +24,9 @@
 
     <div id="telaCadastrar" class="tela">
         <div class="conteudo-branco">
-            <h2>📝 Novo Cadastro</h2>
+            <h2>📝 Novo Registro Integral</h2>
             <div class="form-grupo"><label>Matrícula</label><input type="text" id="regMatricula"></div>
             <div class="form-grupo"><label>Nome Completo</label><input type="text" id="regNome"></div>
-            <div class="form-grupo">
-                <label>Tipo de Atestado</label>
-                <select id="regTipo">
-                    <option value="">Selecione...</option>
-                    <option>Trabalho</option><option>Educação</option><option>ENCCEJA</option><option>ENEM</option>
-                </select>
-            </div>
             <div class="form-grupo">
                 <label>Solicitante</label>
                 <select id="regSolicitante">
@@ -42,7 +35,17 @@
                 </select>
             </div>
             <div class="form-grupo"><label>Data Pedido</label><input type="date" id="regDataPedido"></div>
-            <button class="btn-acao verde" onclick="salvarNovo()">✅ Salvar Cadastro</button>
+            <div class="form-grupo">
+                <label>Tipo de Atestado</label>
+                <select id="regTipo">
+                    <option value="">Selecione...</option>
+                    <option>Trabalho</option><option>Educação</option><option>ENCCEJA</option><option>ENEM</option>
+                </select>
+            </div>
+            <div class="form-grupo"><label>Nº Grade</label><input type="text" id="regGrade"></div>
+            <div class="form-grupo"><label>Data Envio</label><input type="date" id="regDataEnvio"></div>
+            
+            <button class="btn-acao verde" onclick="salvarNovo()">✅ Salvar Registro</button>
             <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
         </div>
     </div>
@@ -83,7 +86,15 @@
         <div class="conteudo-branco">
             <h2>✏️ Atualizar Prontuário</h2>
             <input type="hidden" id="editId">
+            <div class="form-grupo"><label>Matrícula</label><input type="text" id="editMatricula" disabled style="background:#eee"></div>
             <div class="form-grupo"><label>Nome</label><input type="text" id="editNome" disabled style="background:#eee"></div>
+            <div class="form-grupo">
+                <label>Solicitante</label>
+                <select id="editSolicitante">
+                    <option>Advogado</option><option>DEECRIM</option><option>Defensoria</option><option>FUNAP</option>
+                </select>
+            </div>
+            <div class="form-grupo"><label>Data Pedido</label><input type="date" id="editDataPedido"></div>
             <div class="form-grupo">
                 <label>Tipo de Atestado</label>
                 <select id="editTipo">
@@ -92,6 +103,7 @@
             </div>
             <div class="form-grupo"><label>Nº Grade</label><input type="text" id="editGrade"></div>
             <div class="form-grupo"><label>Data Envio</label><input type="date" id="editDataEnvio"></div>
+            
             <button class="btn-acao verde" onclick="salvarEdicao()">💾 Salvar Alterações</button>
             <button class="btn-acao lilas" onclick="excluirRegistro()">📁 Mover para Arquivo</button>
             <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('menuPrincipal')">Cancelar</button>
