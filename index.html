@@ -5,15 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Atestados</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body class="bg-menu">
 
 <div class="container">
     <div id="menuPrincipal" class="tela ativa">
         <h1 style="margin-bottom: 5px;">Controle de Atestados</h1>
-        <p style="text-align: center; color: #7f8c8d; opacity: 0.8; font-size: 0.9em; margin-top: 0; margin-bottom: 30px;">
+        <p style="text-align: center; color: #7f8c8d; opacity: 0.8; font-size: 0.9em; margin-top: 0; margin-bottom: 10px;">
             Cadastro e gestão de atestados para fins de remição.
         </p>
+        <div id="statusSync" style="text-align: center; font-size: 0.7em; color: #27ae60; margin-bottom: 20px; font-weight: bold;">✓ Sistema Pronto</div>
+
         <div class="menu-grid">
             <button class="btn-menu verde" onclick="irPara('telaCadastrar')">📝 Cadastrar</button>
             <button class="btn-menu laranja" onclick="irPara('telaPesquisar')">🔍 Pesquisar</button>
@@ -25,12 +28,10 @@
     <div id="telaCadastrar" class="tela">
         <div class="conteudo-branco">
             <h2>📝 Novo Registro</h2>
-            
             <div class="form-linha">
                 <div class="col-3"><label>Matrícula</label><input type="text" id="regMatricula"></div>
                 <div class="col-9"><label>Nome Completo</label><input type="text" id="regNome"></div>
             </div>
-
             <div class="form-linha">
                 <div class="col-4">
                     <label>Solicitante</label>
@@ -48,12 +49,10 @@
                     </select>
                 </div>
             </div>
-
             <div class="form-linha">
                 <div class="col-6"><label>Nº Grade</label><input type="text" id="regGrade" placeholder="0000/0000"></div>
                 <div class="col-6"><label>Data Envio</label><input type="date" id="regDataEnvio"></div>
             </div>
-
             <button class="btn-acao verde" onclick="salvarNovo()">✅ Salvar Registro</button>
             <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
         </div>
@@ -95,12 +94,10 @@
         <div class="conteudo-branco">
             <h2>✏️ Atualizar Registro</h2>
             <input type="hidden" id="editId">
-            
             <div class="form-linha">
                 <div class="col-3"><label>Matrícula</label><input type="text" id="editMatricula"></div>
                 <div class="col-9"><label>Nome Completo</label><input type="text" id="editNome"></div>
             </div>
-
             <div class="form-linha">
                 <div class="col-4">
                     <label>Solicitante</label>
@@ -116,12 +113,10 @@
                     </select>
                 </div>
             </div>
-
             <div class="form-linha">
                 <div class="col-6"><label>Nº Grade</label><input type="text" id="editGrade"></div>
                 <div class="col-6"><label>Data Envio</label><input type="date" id="editDataEnvio"></div>
             </div>
-            
             <button class="btn-acao verde" onclick="salvarEdicao()">💾 Salvar Alterações</button>
             <button class="btn-acao lilas" onclick="excluirRegistro()">📁 Mover para Arquivo</button>
             <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('menuPrincipal')">Cancelar</button>
