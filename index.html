@@ -48,14 +48,17 @@
 
     <div id="telaBanco" class="tela tela-banco">
         <div class="conteudo-branco">
-            <h2>📊 Banco Ativo</h2>
-            <div style="background: #f0f4f7; padding: 10px; border-radius: 10px; margin-bottom: 10px; display: flex; gap: 5px;">
-                <button class="btn-acao verde" style="font-size: 11px; margin:0; padding:8px;" onclick="exportarBackup()">💾 Backup</button>
-                <button class="btn-acao laranja" style="font-size: 11px; margin:0; padding:8px;" onclick="document.getElementById('inputImport').click()">📂 Abrir</button>
+            <h2>📊 Banco de Dados Ativo</h2>
+            
+            <div class="barra-ferramentas">
+                <button class="btn-ferramenta verde" onclick="exportarBackup()">💾 SALVAR BACKUP</button>
+                <button class="btn-ferramenta laranja" onclick="document.getElementById('inputImport').click()">📂 ABRIR ARQUIVO</button>
                 <input type="file" id="inputImport" style="display:none" onchange="importarBackup(event)">
             </div>
+
             <div id="listaBanco"></div>
-            <button class="btn-acao azul" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
+            
+            <button class="btn-acao azul" style="background:#7f8c8d; margin-top:20px;" onclick="irPara('menuPrincipal')">⬅️ Voltar ao Menu</button>
         </div>
     </div>
 
