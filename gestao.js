@@ -128,3 +128,50 @@ window.irPara = irPara;
 window.salvarNovo = salvarNovo;
 window.exportarBackup = exportarBackup;
 window.importarBackup = importarBackup;
+
+function buscar() {
+    const termo = document.getElementById('inputBusca').value.toLowerCase();
+    const area = document.getElementById('resultadosBusca');
+    
+    // Limpa a área se não houver termo de busca
+    if (termo.trim() === "") {
+        area.innerHTML = "";
+        return;
+    }
+
+    // Filtra no banco de dados (db) por Nome ou Matrícula
+    const resultados = db.filter(r => 
+        r.nome.toLowerCase().includes(termo) || 
+        r.matricula.toString().includes(termo)
+    );
+
+    area.innerHTML = ""; // Limpa resultados anteriores
+
+    if (resultados.length === 0) {
+        area.innerHTML = "<p style='color: #e74c3c; font-weight: bold; padding: 10px;'>❌ Nenhum registro encontrado.</p>";
+    } else {
+        resultados.forEach(r => {
+            const card = document.createElement('div');
+            card.className = 'card-clicavel';
+            
+            // Muda a cor da borda: Verde para Ativo, Roxo para Arquivado
+            const corStatus = r.ativo ? "#27ae60" : "#9b59b6";
+            card.style.borderLeft = `10px solid ${corStatus}`;
+
+            card.innerHTML = `
+                <div>
+                    <strong style="font-size: 1.1em;">${r.nome.toUpperCase()}</strong><br>
+                    <small>Matrícula: ${r.matricula} | Status: <b>${r.ativo ? 'ATIVO' : 'ARQUIVADO'}</b></small>
+                </div>
+                <div style="color: #3498db;">VER ➔</div>
+            `;
+            
+            // Ao clicar no resultado, abre a tela de edição
+            card.onclick = () => abrirEdicao(r.id);
+            area.appendChild(card);
+        });
+    }
+}
+
+// OBRIGATÓRIO: Garante que o navegador encontre a função
+window.buscar = buscar;
