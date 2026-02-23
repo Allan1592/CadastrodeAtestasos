@@ -13,7 +13,7 @@ body {
     min-height: 100vh;
 }
 
-/* Cores de fundo totais */
+/* Cores de fundo totais para o monitor do PC */
 body.bg-menu { background: #cfd8dc; }
 body.bg-cadastrar { background: #27ae60; }
 body.bg-pesquisar { background: #f39c12; }
@@ -22,7 +22,7 @@ body.bg-arquivo { background: #9b59b6; }
 
 .container { 
     width: 100%; 
-    max-width: 1000px; 
+    max-width: 1100px; 
     margin: 0 auto; 
 }
 
@@ -37,10 +37,10 @@ body.bg-arquivo { background: #9b59b6; }
 
 h1, h2 { text-align: center; color: #2c3e50; }
 
+/* MENU: Forçando os 4 botões na mesma linha no PC */
 .menu-grid { 
     display: grid; 
-    /* Força 4 colunas no PC e ajusta para o celular se a tela diminuir */
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+    grid-template-columns: repeat(4, 1fr); 
     gap: 15px; 
     padding: 20px; 
     width: 100%;
@@ -48,12 +48,12 @@ h1, h2 { text-align: center; color: #2c3e50; }
 }
 
 .btn-menu { 
-    height: 150px; /* Reduzi um pouquinho a altura para caber melhor lado a lado */
+    height: 140px; 
     border: none; 
     border-radius: 20px; 
     color: white; 
     font-weight: bold; 
-    font-size: 18px; 
+    font-size: 16px; 
     cursor: pointer;
     transition: transform 0.2s;
     display: flex;
@@ -66,7 +66,19 @@ h1, h2 { text-align: center; color: #2c3e50; }
 
 .form-grupo { margin-bottom: 15px; }
 label { display: block; margin-bottom: 5px; font-weight: bold; }
-input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+
+/* AJUSTE DOS CAMPOS: Agora todos têm o mesmo tamanho real */
+input, select { 
+    width: 100%; 
+    padding: 12px; 
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+    font-size: 16px;
+    box-sizing: border-box; 
+    height: 48px; 
+    display: block;
+    background-color: white;
+}
 
 .btn-acao { 
     width: 100%; padding: 15px; border: none; border-radius: 10px; 
