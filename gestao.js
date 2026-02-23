@@ -1,5 +1,5 @@
 "use strict";
-const SCRIPT_URL = "SUA_URL_AQUI"; // <--- COLOQUE SUA URL AQUI
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7TOXz-PXVA2G41ZVixKLLSe-7PiYPKEuwYOC1vFTvPAyGnfWTHNMhpyQL2E1ovfys/exec"; 
 const UNIDADE_NOME = "UNIDADE_01"; 
 
 let db = [];
