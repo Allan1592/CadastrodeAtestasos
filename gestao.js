@@ -103,15 +103,24 @@ function buscar() {
     resultados.forEach(r => {
         const card = document.createElement('div');
         card.className = 'card-clicavel';
-        // LAYOUT ESPELHADO: Matrícula e Nome em cima, detalhes embaixo
+        
+        // Layout Espelhado e Horizontal
         card.innerHTML = `
             <div style="width:100%">
-                <div style="border-bottom: 1px solid #eee; padding-bottom:5px; margin-bottom:5px;">
-                    <strong>${r.matricula} | ${r.nome.toUpperCase()}</strong>
+                <div style="border-bottom: 2px solid #3498db; padding-bottom:5px; margin-bottom:8px; display: flex; justify-content: space-between;">
+                    <span style="font-size: 1.1em;"><strong>${r.matricula}</strong></span>
+                    <span style="font-size: 1.1em;"><strong>${r.nome.toUpperCase()}</strong></span>
                 </div>
-                <div style="font-size: 0.85em; color: #555; line-height: 1.4;">
-                    ${r.solicitante} | Data Pedido: ${r.dataPedido} | ${r.tipoAtestado}<br>
-                    Nº Grade: ${r.grade} | Data Envio: ${r.dataEnvio}
+                <div style="display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.85em; color: #444;">
+                    <span><strong>Solicitante:</strong> ${r.solicitante}</span>
+                    <span><strong>|</strong></span>
+                    <span><strong>Pedido:</strong> ${r.dataPedido}</span>
+                    <span><strong>|</strong></span>
+                    <span><strong>Tipo:</strong> ${r.tipoAtestado}</span>
+                    <span><strong>|</strong></span>
+                    <span><strong>Grade:</strong> ${r.grade}</span>
+                    <span><strong>|</strong></span>
+                    <span><strong>Envio:</strong> ${r.dataEnvio}</span>
                 </div>
             </div>
         `;
