@@ -6,106 +6,71 @@
     --grad-lilas: linear-gradient(135deg, #9b59b6, #4a235a);
 }
 
-body, html { 
+body { 
     margin: 0; padding: 0; 
     font-family: 'Segoe UI', sans-serif; 
-    min-height: 100vh; 
-    background: #f4f7f6; 
+    transition: background 0.3s;
+    min-height: 100vh;
 }
+
+/* Cores de fundo totais */
+body.bg-menu { background: #cfd8dc; }
+body.bg-cadastrar { background: #27ae60; }
+body.bg-pesquisar { background: #f39c12; }
+body.bg-banco { background: #3498db; }
+body.bg-arquivo { background: #9b59b6; }
 
 .container { 
     width: 100%; 
-    max-width: 1200px; /* Largura de PC */
+    max-width: 1000px; 
     margin: 0 auto; 
 }
 
-.tela { display: none; padding: 20px; box-sizing: border-box; min-height: 100vh; }
+.tela { display: none; padding: 20px; box-sizing: border-box; }
 .tela.ativa { display: block; }
-
-/* Fundos das Telas */
-#menuPrincipal { background: var(--grad-menu); }
-.tela-cadastrar { background: var(--grad-verde); }
-.tela-pesquisar { background: var(--grad-laranja); }
-.tela-banco { background: var(--grad-azul); }
-.tela-arquivo { background: var(--grad-lilas); }
 
 .conteudo-branco {
     background: white; border-radius: 20px; padding: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
     margin: 20px auto;
-    max-width: 900px; /* Centraliza o conteúdo no PC */
 }
 
-h1 { text-align: center; padding-top: 40px; color: #2c3e50; }
+h1, h2 { text-align: center; color: #2c3e50; }
 
-/* Grid de Botões - 4 colunas no PC, 2 no Celular */
 .menu-grid { 
     display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-    gap: 20px; 
-    padding: 20px; 
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+    gap: 20px; padding: 20px; 
 }
 
 .btn-menu { 
-    height: 150px; border: none; border-radius: 20px; color: white; 
-    font-weight: bold; font-size: 18px; cursor: pointer;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 160px; border: none; border-radius: 20px; color: white; 
+    font-weight: bold; font-size: 20px; cursor: pointer;
     transition: transform 0.2s;
 }
 .btn-menu:hover { transform: scale(1.05); }
 
-.form-grupo { margin-bottom: 15px; text-align: left; }
-label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
-input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+.form-grupo { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; }
+input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
 
 .btn-acao { 
     width: 100%; padding: 15px; border: none; border-radius: 10px; 
-    color: white; font-weight: bold; cursor: pointer; margin-top: 10px; 
+    color: white; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px;
 }
 
-.card { background: #fff; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 8px solid #2c3e50; box-shadow: 0 2px 5px rgba(0,0,0,0.1); color: #333; }
+.barra-ferramentas { display: flex; gap: 15px; margin-bottom: 20px; }
+.btn-ferramenta { flex: 1; padding: 20px; font-weight: bold; border: none; border-radius: 12px; cursor: pointer; color: white; }
 
-/* Cores auxiliares */
+.card-clicavel, .card-consulta { 
+    background: #fff; padding: 15px; border-radius: 10px; margin-bottom: 10px; 
+    border-left: 10px solid #2c3e50; display: flex; justify-content: space-between; align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.card-clicavel { cursor: pointer; }
+.card-clicavel:hover { background: #f9f9f9; }
+
 .verde { background: var(--grad-verde); }
 .laranja { background: var(--grad-laranja); }
 .azul { background: var(--grad-azul); }
 .lilas { background: var(--grad-lilas); }
-
-/* Barra de ferramentas no topo do banco */
-.barra-ferramentas {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 25px;
-}
-
-.btn-ferramenta {
-    flex: 1;
-    padding: 25px 10px; /* Bem altos para facilitar o clique */
-    font-size: 18px;
-    font-weight: bold;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    color: white;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    transition: transform 0.2s;
-}
-
-.btn-ferramenta:active { transform: scale(0.95); }
-
-/* Card Clicável (Sem botão de editar) */
-.card-clicavel {
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 12px;
-    border-left: 10px solid #2c3e50;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background 0.2s;
-}
-
-.card-clicavel:hover { background: #f0f7ff; }
