@@ -72,6 +72,8 @@
             <h2>📊 Banco de Dados</h2>
             <div class="barra-ferramentas">
                 <button class="btn-ferramenta verde" onclick="exportarBackup()">💾 SALVAR BACKUP</button>
+                <button class="btn-ferramenta laranja" onclick="document.getElementById('inputImport').click()">📂 RESTAURAR BACKUP</button>
+                <input type="file" id="inputImport" style="display:none" onchange="importarBackup(event)">
             </div>
             <div id="listaBanco"></div>
             <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
