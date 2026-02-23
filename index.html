@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Atestados</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
 </head>
 <body class="bg-menu">
 
 <div class="container">
     <div id="menuPrincipal" class="tela ativa">
         <h1>Controle de Atestados</h1>
-        <p style="text-align: center; color: #7f8c8d; opacity: 0.8; font-size: 0.9em; margin-bottom: 10px;">Gestão de Atestados para Remição</p>
         <div id="statusSync" style="text-align: center; font-size: 0.7em; color: #27ae60; margin-bottom: 20px; font-weight: bold;">✓ Sistema Pronto</div>
 
         <div class="menu-grid">
@@ -60,7 +58,7 @@
         <div class="conteudo-branco">
             <h2>🔍 Pesquisar Registro</h2>
             <div class="form-linha">
-                <div class="col-12"><input type="text" id="inputBusca" placeholder="Digite nome ou matrícula para buscar..." oninput="buscar()"></div>
+                <div class="col-12"><input type="text" id="inputBusca" placeholder="Digite nome ou matrícula..." oninput="buscar()"></div>
             </div>
             <div id="resultadosBusca"></div>
             <button class="btn-acao laranja" onclick="irPara('menuPrincipal')">⬅️ Voltar ao Menu</button>
@@ -69,14 +67,18 @@
 
     <div id="telaBanco" class="tela">
         <div class="conteudo-branco">
-            <h2>📊 Banco de Dados</h2>
-            <div class="barra-ferramentas">
-                <button class="btn-ferramenta verde" onclick="exportarBackup()">💾 SALVAR BACKUP</button>
-                <button class="btn-ferramenta laranja" onclick="document.getElementById('inputImport').click()">📂 RESTAURAR BACKUP</button>
+            <h2>📊 Banco de Dados & Manutenção</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                <button class="btn-acao verde" style="font-size: 0.9em;" onclick="exportarBackup()">💾 Exportar Backup</button>
+                <button class="btn-acao laranja" style="font-size: 0.9em;" onclick="document.getElementById('inputImport').click()">📂 Importar Backup</button>
                 <input type="file" id="inputImport" style="display:none" onchange="importarBackup(event)">
             </div>
-            <div id="listaBanco"></div>
+            
+            <div id="listaBanco" style="max-height: 300px; overflow-y: auto; margin-bottom: 20px;"></div>
+            
             <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+            <button class="btn-acao" style="background:#c0392b; font-size: 0.8em; padding: 10px;" onclick="limparSistemaTotal()">🚨 LIMPAR TODO O SISTEMA</button>
         </div>
     </div>
 
@@ -108,7 +110,7 @@
                 <div class="col-6"><label>Data Envio</label><input type="date" id="editDataEnvio"></div>
             </div>
             <button class="btn-acao verde" onclick="salvarEdicao()">💾 Salvar Alterações</button>
-            <button class="btn-acao lilas" style="background:#e74c3c" onclick="excluirRegistro()">🗑️ EXCLUIR REGISTRO</button>
+            <button class="btn-acao lilas" style="background:#e74c3c" onclick="excluirRegistro()">🗑️ Mover para Arquivo Morto</button>
             <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('telaPesquisar')">🔙 Cancelar e Voltar</button>
         </div>
     </div>
