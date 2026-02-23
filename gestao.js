@@ -76,20 +76,22 @@ function listarBanco() {
     const ativos = db.filter(r => r.ativo);
     
     if(ativos.length === 0) {
-        area.innerHTML = "<p>Nenhum registro encontrado.</p>";
+        area.innerHTML = "<p style='text-align:center; padding:30px; color:#666;'>O banco de dados está vazio.</p>";
         return;
     }
 
     ativos.forEach(r => {
         const card = document.createElement('div');
-        card.className = 'card';
+        card.className = 'card-clicavel';
         card.innerHTML = `
-            <strong>${r.nome.toUpperCase()}</strong><br>
-            <small>Matrícula: ${r.matricula}</small><br>
-            <button class="btn-acao azul" style="padding:5px; height:auto; margin-top:5px">EDITAR</button>
+            <div>
+                <strong style="font-size: 1.2em; color: #2c3e50;">${r.nome.toUpperCase()}</strong><br>
+                <span style="color: #666;">Matrícula: <b>${r.matricula}</b> | Solicitante: ${r.solicitante}</span>
+            </div>
+            <div style="color: #3498db; font-size: 20px;">➔</div>
         `;
-        // Adicionando o clique de forma segura sem usar onclick no HTML (que às vezes causa o erro de CSP)
-        card.querySelector('button').addEventListener('click', () => abrirEdicao(r.id));
+        // O card todo vira o botão de editar/ver
+        card.onclick = () => abrirEdicao(r.id);
         area.appendChild(card);
     });
 }
