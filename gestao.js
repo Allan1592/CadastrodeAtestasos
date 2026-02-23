@@ -35,7 +35,9 @@ function salvarNovo() {
     const mat = document.getElementById('regMatricula').value;
     const sol = document.getElementById('regSolicitante').value;
     const tipo = document.getElementById('regTipo').value;
-    const data = document.getElementById('regDataPedido').value;
+    const dataP = document.getElementById('regDataPedido').value;
+    const grade = document.getElementById('regGrade').value;
+    const dataE = document.getElementById('regDataEnvio').value;
 
     if(!nome || !mat) { alert("Preencha Nome e Matrícula!"); return; }
 
@@ -45,12 +47,16 @@ function salvarNovo() {
         matricula: mat,
         solicitante: sol,
         tipoAtestado: tipo,
-        dataPedido: data,
-        grade: "", dataEnvio: "", ativo: true
+        dataPedido: dataP,
+        grade: grade, 
+        dataEnvio: dataE, 
+        ativo: true
     });
 
     salvarNoStorage();
     alert("Cadastrado com sucesso!");
+    // Limpa campos após salvar
+    document.querySelectorAll('#telaCadastrar input, #telaCadastrar select').forEach(i => i.value = "");
     irPara('menuPrincipal');
 }
 
@@ -76,7 +82,7 @@ function listarArquivo() {
         const card = document.createElement('div');
         card.className = 'card-consulta';
         card.style.borderLeftColor = "#9b59b6";
-        card.innerHTML = `<div><strong>${r.nome.toUpperCase()}</strong><br><small>Enviado em: ${r.dataEnvio}</small></div>`;
+        card.innerHTML = `<div><strong>${r.nome.toUpperCase()}</strong><br><small>Enviado em: ${r.dataEnvio || 'N/A'}</small></div>`;
         area.appendChild(card);
     });
 }
@@ -103,7 +109,10 @@ function abrirEdicao(id) {
     const r = db.find(item => item.id === id);
     if (!r) return;
     document.getElementById('editId').value = r.id;
+    document.getElementById('editMatricula').value = r.matricula;
     document.getElementById('editNome').value = r.nome;
+    document.getElementById('editSolicitante').value = r.solicitante || "";
+    document.getElementById('editDataPedido').value = r.dataPedido || "";
     document.getElementById('editTipo').value = r.tipoAtestado || "";
     document.getElementById('editGrade').value = r.grade || "";
     document.getElementById('editDataEnvio').value = r.dataEnvio || "";
@@ -114,11 +123,13 @@ function salvarEdicao() {
     const id = parseInt(document.getElementById('editId').value);
     const i = db.findIndex(item => item.id === id);
     if (i !== -1) {
+        db[i].solicitante = document.getElementById('editSolicitante').value;
+        db[i].dataPedido = document.getElementById('editDataPedido').value;
         db[i].tipoAtestado = document.getElementById('editTipo').value;
         db[i].grade = document.getElementById('editGrade').value;
         db[i].dataEnvio = document.getElementById('editDataEnvio').value;
         salvarNoStorage();
-        alert("Salvo!");
+        alert("Salvo com sucesso!");
         irPara('menuPrincipal');
     }
 }
@@ -126,7 +137,7 @@ function salvarEdicao() {
 function excluirRegistro() {
     const id = parseInt(document.getElementById('editId').value);
     const i = db.findIndex(item => item.id === id);
-    if (i !== -1 && confirm("Arquivar este registro?")) {
+    if (i !== -1 && confirm("Mover este registro para o Arquivo Morto?")) {
         db[i].ativo = false;
         salvarNoStorage();
         irPara('menuPrincipal');
@@ -137,7 +148,7 @@ function exportarBackup() {
     const blob = new Blob([JSON.stringify(db)], {type: "application/json"});
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "backup_sistema.json";
+    a.download = "backup_atestados.json";
     a.click();
 }
 
@@ -149,9 +160,9 @@ function importarBackup(event) {
         try {
             db = JSON.parse(e.target.result);
             salvarNoStorage();
-            alert("Sucesso!");
+            alert("Backup importado com sucesso!");
             irPara('menuPrincipal');
-        } catch(err) { alert("Erro!"); }
+        } catch(err) { alert("Erro ao ler o arquivo de backup."); }
     };
     reader.readAsText(file);
 }
