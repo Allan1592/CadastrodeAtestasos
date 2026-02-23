@@ -6,6 +6,9 @@
     --grad-lilas: linear-gradient(135deg, #9b59b6, #4a235a);
 }
 
+/* RESET GLOBAL: Garante que o tamanho definido seja o tamanho real */
+* { box-sizing: border-box; }
+
 body { 
     margin: 0; padding: 0; 
     font-family: 'Segoe UI', sans-serif; 
@@ -13,7 +16,6 @@ body {
     min-height: 100vh;
 }
 
-/* Cores de fundo totais para o monitor do PC */
 body.bg-menu { background: #cfd8dc; }
 body.bg-cadastrar { background: #27ae60; }
 body.bg-pesquisar { background: #f39c12; }
@@ -26,62 +28,55 @@ body.bg-arquivo { background: #9b59b6; }
     margin: 0 auto; 
 }
 
-.tela { display: none; padding: 20px; box-sizing: border-box; }
+.tela { display: none; padding: 20px; }
 .tela.ativa { display: block; }
 
 .conteudo-branco {
     background: white; border-radius: 20px; padding: 30px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
     margin: 20px auto;
+    max-width: 850px;
 }
 
 h1, h2 { text-align: center; color: #2c3e50; }
 
-/* MENU: Forçando os 4 botões na mesma linha no PC */
 .menu-grid { 
     display: grid; 
     grid-template-columns: repeat(4, 1fr); 
     gap: 15px; 
     padding: 20px; 
-    width: 100%;
-    box-sizing: border-box;
 }
 
 .btn-menu { 
-    height: 140px; 
-    border: none; 
-    border-radius: 20px; 
-    color: white; 
-    font-weight: bold; 
-    font-size: 16px; 
-    cursor: pointer;
+    height: 140px; border: none; border-radius: 20px; color: white; 
+    font-weight: bold; font-size: 16px; cursor: pointer;
     transition: transform 0.2s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
-
 .btn-menu:hover { transform: scale(1.05); }
 
-.form-grupo { margin-bottom: 15px; }
-label { display: block; margin-bottom: 5px; font-weight: bold; }
+.form-grupo { margin-bottom: 20px; width: 100%; }
+label { display: block; margin-bottom: 8px; font-weight: bold; color: #34495e; }
 
-/* AJUSTE DOS CAMPOS: Agora todos têm o mesmo tamanho real */
-input, select { 
-    width: 100%; 
-    padding: 12px; 
-    border: 1px solid #ccc; 
-    border-radius: 8px; 
-    font-size: 16px;
-    box-sizing: border-box; 
-    height: 48px; 
-    display: block;
+/* HARMONIA TOTAL: Inputs e Selects com o mesmo comportamento */
+input[type="text"], 
+input[type="date"], 
+select { 
+    width: 100% !important; 
+    height: 50px; 
+    padding: 10px 15px; 
+    border: 2px solid #ddd; 
+    border-radius: 10px; 
+    font-size: 16px; 
     background-color: white;
+    display: block;
+    outline: none;
 }
 
+input:focus, select:focus { border-color: #3498db; }
+
 .btn-acao { 
-    width: 100%; padding: 15px; border: none; border-radius: 10px; 
+    width: 100%; padding: 16px; border: none; border-radius: 10px; 
     color: white; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px;
 }
 
@@ -89,7 +84,7 @@ input, select {
 .btn-ferramenta { flex: 1; padding: 20px; font-weight: bold; border: none; border-radius: 12px; cursor: pointer; color: white; }
 
 .card-clicavel, .card-consulta { 
-    background: #fff; padding: 15px; border-radius: 10px; margin-bottom: 10px; 
+    background: #fff; padding: 18px; border-radius: 12px; margin-bottom: 12px; 
     border-left: 10px solid #2c3e50; display: flex; justify-content: space-between; align-items: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
