@@ -47,7 +47,9 @@
     <div id="telaPesquisar" class="tela">
         <div class="conteudo-branco">
             <h2>🔍 Pesquisar Prontuário</h2>
-            <input type="text" id="inputBusca" placeholder="Digite nome ou matrícula..." oninput="buscar()" style="margin-bottom:20px;">
+            <div class="form-grupo">
+                <input type="text" id="inputBusca" placeholder="Digite nome ou matrícula..." oninput="buscar()">
+            </div>
             <div id="resultadosBusca"></div>
             <button class="btn-acao laranja" onclick="irPara('menuPrincipal')">⬅️ Voltar ao Menu</button>
         </div>
