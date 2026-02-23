@@ -4,7 +4,6 @@ const UNIDADE_NOME = "UNIDADE_01";
 
 let db = [];
 
-// CARREGAR DADOS AO INICIAR
 function carregarDados() {
     const dadosSalvos = localStorage.getItem('meu_sistema_db');
     if (dadosSalvos) {
@@ -17,7 +16,6 @@ function salvarNoStorage() {
     sincronizarComGoogle();
 }
 
-// SINCRONIZAÇÃO COM PROTEÇÃO CONTRA DUPLICIDADE
 async function sincronizarComGoogle() {
     const statusEl = document.getElementById('statusSync');
     const dadosParaEnviar = db.filter(r => !r.sincronizado && !r.enviando);
@@ -27,7 +25,7 @@ async function sincronizarComGoogle() {
         return;
     }
 
-    if(statusEl) statusEl.innerText = "⏳ Sincronizando com a Planilha...";
+    if(statusEl) statusEl.innerText = "⏳ Sincronizando...";
 
     for (let registro of dadosParaEnviar) {
         registro.enviando = true; 
@@ -42,48 +40,40 @@ async function sincronizarComGoogle() {
             delete registro.enviando;
         } catch (e) {
             delete registro.enviando;
-            if(statusEl) statusEl.innerText = "⚠️ Erro de conexão";
         }
     }
     localStorage.setItem('meu_sistema_db', JSON.stringify(db));
 }
 
-// NAVEGAÇÃO ENTRE TELAS (COM LIMPEZA DE PESQUISA)
 function irPara(idTela) {
     document.querySelectorAll('.tela').forEach(t => t.style.display = 'none');
     const tela = document.getElementById(idTela);
     if (tela) {
         tela.style.display = 'block';
-        
-        // Se for para tela de pesquisar, limpa tudo para não mostrar lista velha
         if(idTela === 'telaPesquisar') {
             document.getElementById('inputBusca').value = "";
             document.getElementById('resultadosBusca').innerHTML = "";
         }
-        
         if(idTela === 'telaBanco') listarBanco();
         if(idTela === 'telaArquivo') listarArquivo();
         if(idTela === 'menuPrincipal') sincronizarComGoogle();
     }
 }
 
-// VALIDAÇÃO DE CAMPOS OBRIGATÓRIOS
 function validarCampos(prefixo) {
     const campos = ['Matricula', 'Nome', 'Solicitante', 'DataPedido', 'Tipo', 'Grade', 'DataEnvio'];
     for (let c of campos) {
         const valor = document.getElementById(prefixo + c).value;
         if (!valor || valor.trim() === "") {
-            alert("Atenção: Preencha todos os campos antes de continuar!");
+            alert("⚠️ Por favor, preencha todos os campos.");
             return false;
         }
     }
     return true;
 }
 
-// SALVAR NOVO REGISTRO
 function salvarNovo() {
     if (!validarCampos('reg')) return;
-
     const novo = {
         id: Date.now(),
         matricula: document.getElementById('regMatricula').value,
@@ -98,21 +88,15 @@ function salvarNovo() {
     };
     db.push(novo);
     salvarNoStorage();
-    alert("✅ Cadastrado com sucesso!");
+    alert("✅ Salvo!");
     document.querySelectorAll('#telaCadastrar input, #telaCadastrar select').forEach(i => i.value = "");
     irPara('menuPrincipal');
 }
 
-// BUSCA DETALHADA E ESPELHADA (SÓ APARECE SE DIGITAR)
 function buscar() {
     const termo = document.getElementById('inputBusca').value.toLowerCase();
     const area = document.getElementById('resultadosBusca');
-    
-    if (termo.length < 1) {
-        area.innerHTML = "";
-        return;
-    }
-
+    if (termo.length < 1) { area.innerHTML = ""; return; }
     area.innerHTML = "";
     let resultados = db.filter(r => r.ativo === true && 
         (r.nome.toLowerCase().includes(termo) || r.matricula.includes(termo)));
@@ -139,7 +123,6 @@ function buscar() {
     });
 }
 
-// ABRIR EDIÇÃO
 function abrirEdicao(id) {
     const r = db.find(item => item.id === id);
     if (!r) return;
@@ -154,7 +137,6 @@ function abrirEdicao(id) {
     irPara('telaEditar');
 }
 
-// SALVAR EDIÇÃO
 function salvarEdicao() {
     if (!validarCampos('edit')) return;
     const id = parseInt(document.getElementById('editId').value);
@@ -171,12 +153,11 @@ function salvarEdicao() {
             sincronizado: false 
         };
         salvarNoStorage();
-        alert("✅ Registro atualizado!");
+        alert("✅ Atualizado!");
         irPara('telaPesquisar');
     }
 }
 
-// EXCLUIR (MOVER PARA ARQUIVO)
 function excluirRegistro() {
     const id = parseInt(document.getElementById('editId').value);
     if (confirm("Mover para o Arquivo Morto?")) {
@@ -188,29 +169,25 @@ function excluirRegistro() {
     }
 }
 
-// LISTAR NO BANCO
 function listarBanco() {
     const area = document.getElementById('listaBanco');
     area.innerHTML = "";
-    const ativos = db.filter(r => r.ativo);
-    ativos.forEach(r => {
-        const card = document.createElement('div');
-        card.className = 'card-consulta';
-        card.innerHTML = `<div><strong>${r.nome.toUpperCase()}</strong><br><small>Mat: ${r.matricula}</small></div><div>${r.sincronizado ? '☁️' : '⏳'}</div>`;
-        area.appendChild(card);
+    db.filter(r => r.ativo).forEach(r => {
+        const d = document.createElement('div');
+        d.className = 'card-consulta';
+        d.innerHTML = `<div><strong>${r.nome.toUpperCase()}</strong></div><div>${r.sincronizado ? '☁️' : '⏳'}</div>`;
+        area.appendChild(d);
     });
 }
 
-// LISTAR NO ARQUIVO
 function listarArquivo() {
     const area = document.getElementById('listaArquivo');
     area.innerHTML = "";
-    const arquivados = db.filter(r => !r.ativo);
-    arquivados.forEach(r => {
-        const card = document.createElement('div');
-        card.className = 'card-consulta';
-        card.innerHTML = `<div><strong>${r.nome.toUpperCase()}</strong></div><button onclick="restaurar(${r.id})">Restaurar</button>`;
-        area.appendChild(card);
+    db.filter(r => !r.ativo).forEach(r => {
+        const d = document.createElement('div');
+        d.className = 'card-consulta';
+        d.innerHTML = `<div><strong>${r.nome.toUpperCase()}</strong></div><button onclick="restaurar(${r.id})">Restaurar</button>`;
+        area.appendChild(d);
     });
 }
 
@@ -222,15 +199,7 @@ function restaurar(id) {
     irPara('telaArquivo');
 }
 
-function exportarBackup() {
-    const blob = new Blob([JSON.stringify(db)], {type: "application/json"});
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "backup_atestados.json";
-    a.click();
-}
-
-// EXPORTA UM ARQUIVO .JSON PARA VOCÊ GUARDAR
+// FUNÇÕES DE MANUTENÇÃO
 function exportarBackup() {
     const blob = new Blob([JSON.stringify(db)], {type: "application/json"});
     const a = document.createElement("a");
@@ -240,29 +209,34 @@ function exportarBackup() {
     a.click();
 }
 
-// LÊ O ARQUIVO .JSON E COLOCA OS DADOS DE VOLTA NO SITE
 function importarBackup(event) {
     const file = event.target.files[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (e) => {
         try {
-            const dadosImportados = JSON.parse(e.target.result);
-            if (confirm("Isso vai substituir os dados atuais pelos do arquivo. Continuar?")) {
-                db = dadosImportados;
+            const dados = JSON.parse(e.target.result);
+            if (confirm("Isso substituirá sua lista atual. Continuar?")) {
+                db = dados;
                 localStorage.setItem('meu_sistema_db', JSON.stringify(db));
-                alert("✅ Backup restaurado com sucesso!");
+                alert("✅ Backup restaurado!");
                 irPara('menuPrincipal');
             }
-        } catch(err) {
-            alert("❌ Erro ao ler o arquivo de backup.");
-        }
+        } catch(err) { alert("❌ Arquivo inválido."); }
     };
     reader.readAsText(file);
 }
 
-// Certifique-se de que essas funções estejam disponíveis globalmente
-window.exportarBackup = exportarBackup;
-window.importarBackup = importarBackup;
+function limparSistemaTotal() {
+    if (confirm("🚨 ATENÇÃO: Isso apaga todos os registros da pesquisa (tela). A planilha Google NÃO é afetada. Deseja resetar?")) {
+        db = [];
+        localStorage.removeItem('meu_sistema_db');
+        alert("Sistema limpo!");
+        location.reload();
+    }
+}
 
-carregarDados();
+window.irPara = irPara; window.salvarNovo = salvarNovo; window.salvarEdicao = salvarEdicao;
+window.excluirRegistro = excluirRegistro; window.buscar = buscar;
+window.exportarBackup = exportarBackup; window.importarBackup = importarBackup; 
+window.limparSistemaTotal = limparSistemaTotal; window.restaur
