@@ -6,22 +6,46 @@
     --grad-lilas: linear-gradient(135deg, #9b59b6, #4a235a);
 }
 
-body, html { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; min-height: 100vh; }
+body, html { 
+    margin: 0; 
+    padding: 0; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    min-height: 100vh; 
+    background-color: #f4f7f6; /* Cor de fundo suave para o PC */
+}
 
-.container { width: 100%; max-width: 500px; margin: auto; }
-.tela { display: none; padding: 20px; box-sizing: border-box; min-height: 100vh; }
-.tela.ativa { display: block; }
+/* CONTAINER AJUSTÁVEL */
+.container { 
+    width: 100%; 
+    max-width: 1000px; /* Aumentamos de 500px para 1000px */
+    margin: 0 auto; 
+    transition: all 0.3s ease;
+}
 
-/* Cores de Fundo por Tela */
-#menuPrincipal { background: var(--grad-menu); }
-.tela-cadastrar { background: var(--grad-verde); }
-.tela-pesquisar { background: var(--grad-laranja); }
-.tela-banco { background: var(--grad-azul); }
-.tela-arquivo { background: var(--grad-lilas); }
+/* Ajuste das Telas */
+.tela { 
+    display: none; 
+    padding: 20px; 
+    box-sizing: border-box; 
+    min-height: 100vh; 
+}
 
-.conteudo-branco {
-    background: white; border-radius: 20px; padding: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-top: 15px;
+/* Se for PC (Tela maior que 768px) */
+@media (min-width: 768px) {
+    .container {
+        padding: 40px 20px;
+    }
+    .menu-grid {
+        grid-template-columns: 1fr 1fr 1fr 1fr; /* 4 botões lado a lado no PC */
+        gap: 20px;
+    }
+    .conteudo-branco {
+        padding: 40px;
+        max-width: 800px;
+        margin: 20px auto;
+    }
+}
+
 }
 
 h1 { text-align: center; color: #263238; margin-top: 40px; font-weight: 800; }
