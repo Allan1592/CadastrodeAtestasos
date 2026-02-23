@@ -230,4 +230,39 @@ function exportarBackup() {
     a.click();
 }
 
+// EXPORTA UM ARQUIVO .JSON PARA VOCÊ GUARDAR
+function exportarBackup() {
+    const blob = new Blob([JSON.stringify(db)], {type: "application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    const data = new Date().toLocaleDateString().replace(/\//g, '-');
+    a.download = `backup_atestados_${data}.json`;
+    a.click();
+}
+
+// LÊ O ARQUIVO .JSON E COLOCA OS DADOS DE VOLTA NO SITE
+function importarBackup(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const dadosImportados = JSON.parse(e.target.result);
+            if (confirm("Isso vai substituir os dados atuais pelos do arquivo. Continuar?")) {
+                db = dadosImportados;
+                localStorage.setItem('meu_sistema_db', JSON.stringify(db));
+                alert("✅ Backup restaurado com sucesso!");
+                irPara('menuPrincipal');
+            }
+        } catch(err) {
+            alert("❌ Erro ao ler o arquivo de backup.");
+        }
+    };
+    reader.readAsText(file);
+}
+
+// Certifique-se de que essas funções estejam disponíveis globalmente
+window.exportarBackup = exportarBackup;
+window.importarBackup = importarBackup;
+
 carregarDados();
