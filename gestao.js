@@ -1,5 +1,8 @@
 "use strict";
 
+const SCRIPT_URL = "SUA_URL_AQUI"; // <--- COLE SUA URL ENTRE AS ASPAS
+const UNIDADE_NOME = "UNIDADE_01"; // Identifica de onde veio o dado
+
 let db = [];
 
 function carregarDados() {
@@ -11,6 +14,38 @@ function carregarDados() {
 
 function salvarNoStorage() {
     localStorage.setItem('meu_sistema_db', JSON.stringify(db));
+    sincronizarComGoogle(); // Tenta enviar sempre que salvar algo
+}
+
+async function sincronizarComGoogle() {
+    const statusEl = document.getElementById('statusSync');
+    const dadosParaEnviar = db.filter(r => !r.sincronizado);
+    
+    if (dadosParaEnviar.length === 0) {
+        if(statusEl) statusEl.innerText = "✓ Tudo Sincronizado";
+        return;
+    }
+
+    if(statusEl) statusEl.innerText = "⏳ Sincronizando com a Planilha...";
+
+    for (let registro of dadosParaEnviar) {
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors", // Necessário para Google Script
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ...registro, unidade: UNIDADE_NOME })
+            });
+            
+            // Como usamos no-cors, não conseguimos ler o resultado, 
+            // mas se não deu erro, marcamos como sincronizado
+            registro.sincronizado = true;
+        } catch (error) {
+            if(statusEl) statusEl.innerText = "⚠️ Offline: Aguardando conexão";
+            console.log("Erro de sync:", error);
+        }
+    }
+    localStorage.setItem('meu_sistema_db', JSON.stringify(db));
 }
 
 function irPara(idTela) {
@@ -20,7 +55,10 @@ function irPara(idTela) {
     const tela = document.getElementById(idTela);
     if (tela) {
         tela.style.display = 'block';
-        if(idTela === 'menuPrincipal') document.body.classList.add('bg-menu');
+        if(idTela === 'menuPrincipal') {
+            document.body.classList.add('bg-menu');
+            sincronizarComGoogle(); // Tenta sincronizar ao voltar ao menu
+        }
         if(idTela === 'telaCadastrar') document.body.classList.add('bg-cadastrar');
         if(idTela === 'telaPesquisar') document.body.classList.add('bg-pesquisar');
         if(idTela === 'telaBanco') document.body.classList.add('bg-banco');
@@ -33,43 +71,38 @@ function irPara(idTela) {
 function salvarNovo() {
     const nome = document.getElementById('regNome').value;
     const mat = document.getElementById('regMatricula').value;
-    const sol = document.getElementById('regSolicitante').value;
-    const tipo = document.getElementById('regTipo').value;
-    const dataP = document.getElementById('regDataPedido').value;
-    const grade = document.getElementById('regGrade').value;
-    const dataE = document.getElementById('regDataEnvio').value;
-
     if(!nome || !mat) { alert("Preencha Nome e Matrícula!"); return; }
 
-    db.push({
+    const novo = {
         id: Date.now(),
         nome: nome,
         matricula: mat,
-        solicitante: sol,
-        tipoAtestado: tipo,
-        dataPedido: dataP,
-        grade: grade, 
-        dataEnvio: dataE, 
-        ativo: true
-    });
+        solicitante: document.getElementById('regSolicitante').value,
+        tipoAtestado: document.getElementById('regTipo').value,
+        dataPedido: document.getElementById('regDataPedido').value,
+        grade: document.getElementById('regGrade').value,
+        dataEnvio: document.getElementById('regDataEnvio').value,
+        ativo: true,
+        sincronizado: false
+    };
 
+    db.push(novo);
     salvarNoStorage();
-    alert("Cadastrado com sucesso!");
-    // Limpa campos após salvar
+    alert("Salvo localmente! Sincronização em segundo plano.");
     document.querySelectorAll('#telaCadastrar input, #telaCadastrar select').forEach(i => i.value = "");
     irPara('menuPrincipal');
 }
 
+// Funções de listagem e busca (sem alteração na lógica, apenas mantendo a funcionalidade)
 function listarBanco() {
     const area = document.getElementById('listaBanco');
     area.innerHTML = "";
     const ativos = db.filter(r => r.ativo);
     if(ativos.length === 0) { area.innerHTML = "<p style='text-align:center;'>Vazio.</p>"; return; }
-
     ativos.forEach(r => {
         const card = document.createElement('div');
         card.className = 'card-consulta';
-        card.innerHTML = `<div><strong>${r.nome.toUpperCase()}</strong><br><small>Mat: ${r.matricula} | Tipo: ${r.tipoAtestado || '---'}</small></div><div style='color:#ccc; font-size:12px;'>CONSULTA</div>`;
+        card.innerHTML = `<div><strong>${r.nome.toUpperCase()}</strong><br><small>Mat: ${r.matricula} | Tipo: ${r.tipoAtestado || '---'}</small></div><div style='color:#ccc; font-size:12px;'>${r.sincronizado ? 'NUVEM' : 'LOCAL'}</div>`;
         area.appendChild(card);
     });
 }
@@ -92,9 +125,7 @@ function buscar() {
     const area = document.getElementById('resultadosBusca');
     area.innerHTML = "";
     if (termo.trim() === "") return;
-
     const resultados = db.filter(r => r.nome.toLowerCase().includes(termo) || r.matricula.toString().includes(termo));
-    
     resultados.forEach(r => {
         const card = document.createElement('div');
         card.className = 'card-clicavel';
@@ -123,13 +154,16 @@ function salvarEdicao() {
     const id = parseInt(document.getElementById('editId').value);
     const i = db.findIndex(item => item.id === id);
     if (i !== -1) {
+        db[i].nome = document.getElementById('editNome').value;
+        db[i].matricula = document.getElementById('editMatricula').value;
         db[i].solicitante = document.getElementById('editSolicitante').value;
         db[i].dataPedido = document.getElementById('editDataPedido').value;
         db[i].tipoAtestado = document.getElementById('editTipo').value;
         db[i].grade = document.getElementById('editGrade').value;
         db[i].dataEnvio = document.getElementById('editDataEnvio').value;
+        db[i].sincronizado = false; // Força re-sincronização com o dado novo
         salvarNoStorage();
-        alert("Salvo com sucesso!");
+        alert("Alterações salvas!");
         irPara('menuPrincipal');
     }
 }
@@ -137,8 +171,9 @@ function salvarEdicao() {
 function excluirRegistro() {
     const id = parseInt(document.getElementById('editId').value);
     const i = db.findIndex(item => item.id === id);
-    if (i !== -1 && confirm("Mover este registro para o Arquivo Morto?")) {
+    if (i !== -1 && confirm("Mover para o Arquivo Morto?")) {
         db[i].ativo = false;
+        db[i].sincronizado = false;
         salvarNoStorage();
         irPara('menuPrincipal');
     }
@@ -160,9 +195,9 @@ function importarBackup(event) {
         try {
             db = JSON.parse(e.target.result);
             salvarNoStorage();
-            alert("Backup importado com sucesso!");
+            alert("Sucesso!");
             irPara('menuPrincipal');
-        } catch(err) { alert("Erro ao ler o arquivo de backup."); }
+        } catch(err) { alert("Erro!"); }
     };
     reader.readAsText(file);
 }
