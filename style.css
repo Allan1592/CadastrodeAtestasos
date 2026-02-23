@@ -70,3 +70,42 @@ input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radiu
 .laranja { background: var(--grad-laranja); }
 .azul { background: var(--grad-azul); }
 .lilas { background: var(--grad-lilas); }
+
+/* Barra de ferramentas no topo do banco */
+.barra-ferramentas {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.btn-ferramenta {
+    flex: 1;
+    padding: 25px 10px; /* Bem altos para facilitar o clique */
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transition: transform 0.2s;
+}
+
+.btn-ferramenta:active { transform: scale(0.95); }
+
+/* Card Clicável (Sem botão de editar) */
+.card-clicavel {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    border-left: 10px solid #2c3e50;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.card-clicavel:hover { background: #f0f7ff; }
