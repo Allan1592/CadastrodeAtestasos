@@ -2,11 +2,11 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sistama de Gestão Digital</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão Digital v2</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="bg-menu">
 
 <div class="container">
     <div id="menuPrincipal" class="tela ativa">
@@ -19,11 +19,18 @@
         </div>
     </div>
 
-    <div id="telaCadastrar" class="tela tela-cadastrar">
+    <div id="telaCadastrar" class="tela">
         <div class="conteudo-branco">
             <h2>📝 Novo Cadastro</h2>
             <div class="form-grupo"><label>Matrícula</label><input type="text" id="regMatricula"></div>
             <div class="form-grupo"><label>Nome Completo</label><input type="text" id="regNome"></div>
+            <div class="form-grupo">
+                <label>Tipo de Atestado</label>
+                <select id="regTipo">
+                    <option value="">Selecione...</option>
+                    <option>Trabalho</option><option>Educação</option><option>ENCCEJA</option><option>ENEM</option>
+                </select>
+            </div>
             <div class="form-grupo">
                 <label>Solicitante</label>
                 <select id="regSolicitante">
@@ -37,32 +44,29 @@
         </div>
     </div>
 
-    <div id="telaPesquisar" class="tela tela-pesquisar">
+    <div id="telaPesquisar" class="tela">
         <div class="conteudo-branco">
-            <h2>🔍 Pesquisar</h2>
-            <input type="text" id="inputBusca" placeholder="Nome ou Matrícula..." oninput="buscar()" style="margin-bottom:20px;">
+            <h2>🔍 Pesquisar Prontuário</h2>
+            <input type="text" id="inputBusca" placeholder="Digite nome ou matrícula..." oninput="buscar()" style="margin-bottom:20px;">
             <div id="resultadosBusca"></div>
             <button class="btn-acao laranja" onclick="irPara('menuPrincipal')">⬅️ Voltar ao Menu</button>
         </div>
     </div>
 
-    <div id="telaBanco" class="tela tela-banco">
+    <div id="telaBanco" class="tela">
         <div class="conteudo-branco">
-            <h2>📊 Banco de Dados Ativo</h2>
-            
+            <h2>📊 Banco de Dados (Consulta)</h2>
             <div class="barra-ferramentas">
                 <button class="btn-ferramenta verde" onclick="exportarBackup()">💾 SALVAR BACKUP</button>
                 <button class="btn-ferramenta laranja" onclick="document.getElementById('inputImport').click()">📂 ABRIR ARQUIVO</button>
                 <input type="file" id="inputImport" style="display:none" onchange="importarBackup(event)">
             </div>
-
             <div id="listaBanco"></div>
-            
-            <button class="btn-acao azul" style="background:#7f8c8d; margin-top: 20px;" onclick="irPara('menuPrincipal')">⬅️ Voltar ao Menu</button>
+            <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
         </div>
     </div>
 
-    <div id="telaArquivo" class="tela tela-arquivo">
+    <div id="telaArquivo" class="tela">
         <div class="conteudo-branco">
             <h2>📁 Arquivo Morto</h2>
             <div id="listaArquivo"></div>
@@ -70,15 +74,21 @@
         </div>
     </div>
 
-    <div id="telaEditar" class="tela tela-banco">
+    <div id="telaEditar" class="tela">
         <div class="conteudo-branco">
-            <h2>✏️ Atualizar</h2>
+            <h2>✏️ Atualizar Prontuário</h2>
             <input type="hidden" id="editId">
             <div class="form-grupo"><label>Nome</label><input type="text" id="editNome" disabled style="background:#eee"></div>
+            <div class="form-grupo">
+                <label>Tipo de Atestado</label>
+                <select id="editTipo">
+                    <option>Trabalho</option><option>Educação</option><option>ENCCEJA</option><option>ENEM</option>
+                </select>
+            </div>
             <div class="form-grupo"><label>Nº Grade</label><input type="text" id="editGrade"></div>
             <div class="form-grupo"><label>Data Envio</label><input type="date" id="editDataEnvio"></div>
             <button class="btn-acao verde" onclick="salvarEdicao()">💾 Salvar Alterações</button>
-            <button class="btn-acao lilas" onclick="excluirRegistro()">📁 Mover p/ Arquivo</button>
+            <button class="btn-acao lilas" onclick="excluirRegistro()">📁 Mover para Arquivo</button>
             <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('menuPrincipal')">Cancelar</button>
         </div>
     </div>
