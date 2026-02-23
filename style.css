@@ -39,15 +39,29 @@ h1, h2 { text-align: center; color: #2c3e50; }
 
 .menu-grid { 
     display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
-    gap: 20px; padding: 20px; 
+    /* Força 4 colunas no PC e ajusta para o celular se a tela diminuir */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+    gap: 15px; 
+    padding: 20px; 
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .btn-menu { 
-    height: 160px; border: none; border-radius: 20px; color: white; 
-    font-weight: bold; font-size: 20px; cursor: pointer;
+    height: 150px; /* Reduzi um pouquinho a altura para caber melhor lado a lado */
+    border: none; 
+    border-radius: 20px; 
+    color: white; 
+    font-weight: bold; 
+    font-size: 18px; 
+    cursor: pointer;
     transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
+
 .btn-menu:hover { transform: scale(1.05); }
 
 .form-grupo { margin-bottom: 15px; }
