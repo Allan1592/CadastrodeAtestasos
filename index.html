@@ -11,10 +11,8 @@
 
 <div class="container">
     <div id="menuPrincipal" class="tela ativa">
-        <h1 style="margin-bottom: 5px;">Controle de Atestados</h1>
-        <p style="text-align: center; color: #7f8c8d; opacity: 0.8; font-size: 0.9em; margin-top: 0; margin-bottom: 10px;">
-            Cadastro e gestão de atestados para fins de remição.
-        </p>
+        <h1>Controle de Atestados</h1>
+        <p style="text-align: center; color: #7f8c8d; opacity: 0.8; font-size: 0.9em; margin-bottom: 10px;">Gestão de Atestados para Remição</p>
         <div id="statusSync" style="text-align: center; font-size: 0.7em; color: #27ae60; margin-bottom: 20px; font-weight: bold;">✓ Sistema Pronto</div>
 
         <div class="menu-grid">
@@ -62,10 +60,17 @@
         <div class="conteudo-branco">
             <h2>🔍 Pesquisar Registro</h2>
             <div class="form-linha">
-                <div class="col-12"><input type="text" id="inputBusca" placeholder="Digite nome ou matrícula..." oninput="buscar()"></div>
+                <div class="col-6"><input type="text" id="inputBusca" placeholder="Nome ou Matrícula..." oninput="buscar()"></div>
+                <div class="col-3">
+                    <select id="filtroTipo" onchange="buscar()">
+                        <option value="">Todos Tipos</option>
+                        <option>Trabalho</option><option>Educação</option><option>ENCCEJA</option><option>ENEM</option>
+                    </select>
+                </div>
+                <div class="col-3"><input type="date" id="filtroData" onchange="buscar()"></div>
             </div>
             <div id="resultadosBusca"></div>
-            <button class="btn-acao laranja" onclick="irPara('menuPrincipal')">⬅️ Voltar ao Menu</button>
+            <button class="btn-acao laranja" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
         </div>
     </div>
 
@@ -85,6 +90,7 @@
     <div id="telaArquivo" class="tela">
         <div class="conteudo-branco">
             <h2>📁 Arquivo Morto</h2>
+            <p style="text-align:center; font-size: 0.8em; color: #7f8c8d;">Registros excluídos aparecem aqui.</p>
             <div id="listaArquivo"></div>
             <button class="btn-acao lilas" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
         </div>
@@ -118,7 +124,7 @@
                 <div class="col-6"><label>Data Envio</label><input type="date" id="editDataEnvio"></div>
             </div>
             <button class="btn-acao verde" onclick="salvarEdicao()">💾 Salvar Alterações</button>
-            <button class="btn-acao lilas" onclick="excluirRegistro()">📁 Mover para Arquivo</button>
+            <button class="btn-acao lilas" style="background:#e74c3c" onclick="excluirRegistro()">🗑️ EXCLUIR REGISTRO</button>
             <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('menuPrincipal')">Cancelar</button>
         </div>
     </div>
