@@ -52,7 +52,7 @@
                 <div class="col-6"><label>Data Envio</label><input type="date" id="regDataEnvio"></div>
             </div>
             <button class="btn-acao verde" onclick="salvarNovo()">✅ Salvar Registro</button>
-            <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
+            <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('menuPrincipal')">⬅️ Voltar ao Menu</button>
         </div>
     </div>
 
@@ -60,39 +60,21 @@
         <div class="conteudo-branco">
             <h2>🔍 Pesquisar Registro</h2>
             <div class="form-linha">
-                <div class="col-6"><input type="text" id="inputBusca" placeholder="Nome ou Matrícula..." oninput="buscar()"></div>
-                <div class="col-3">
-                    <select id="filtroTipo" onchange="buscar()">
-                        <option value="">Todos Tipos</option>
-                        <option>Trabalho</option><option>Educação</option><option>ENCCEJA</option><option>ENEM</option>
-                    </select>
-                </div>
-                <div class="col-3"><input type="date" id="filtroData" onchange="buscar()"></div>
+                <div class="col-12"><input type="text" id="inputBusca" placeholder="Digite nome ou matrícula para buscar..." oninput="buscar()"></div>
             </div>
             <div id="resultadosBusca"></div>
-            <button class="btn-acao laranja" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
+            <button class="btn-acao laranja" onclick="irPara('menuPrincipal')">⬅️ Voltar ao Menu</button>
         </div>
     </div>
 
     <div id="telaBanco" class="tela">
         <div class="conteudo-branco">
-            <h2>📊 Banco de Dados (Consulta)</h2>
+            <h2>📊 Banco de Dados</h2>
             <div class="barra-ferramentas">
                 <button class="btn-ferramenta verde" onclick="exportarBackup()">💾 SALVAR BACKUP</button>
-                <button class="btn-ferramenta laranja" onclick="document.getElementById('inputImport').click()">📂 ABRIR ARQUIVO</button>
-                <input type="file" id="inputImport" style="display:none" onchange="importarBackup(event)">
             </div>
             <div id="listaBanco"></div>
             <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
-        </div>
-    </div>
-
-    <div id="telaArquivo" class="tela">
-        <div class="conteudo-branco">
-            <h2>📁 Arquivo Morto</h2>
-            <p style="text-align:center; font-size: 0.8em; color: #7f8c8d;">Registros excluídos aparecem aqui.</p>
-            <div id="listaArquivo"></div>
-            <button class="btn-acao lilas" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
         </div>
     </div>
 
@@ -125,7 +107,15 @@
             </div>
             <button class="btn-acao verde" onclick="salvarEdicao()">💾 Salvar Alterações</button>
             <button class="btn-acao lilas" style="background:#e74c3c" onclick="excluirRegistro()">🗑️ EXCLUIR REGISTRO</button>
-            <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('menuPrincipal')">Cancelar</button>
+            <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('telaPesquisar')">🔙 Cancelar e Voltar</button>
+        </div>
+    </div>
+
+    <div id="telaArquivo" class="tela">
+        <div class="conteudo-branco">
+            <h2>📁 Arquivo Morto</h2>
+            <div id="listaArquivo"></div>
+            <button class="btn-acao lilas" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
         </div>
     </div>
 </div>
