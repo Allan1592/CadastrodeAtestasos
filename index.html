@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sistama de Gestão Digital</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <div id="menuPrincipal" class="tela ativa">
+        <h1>Gestão Digital</h1>
+        <div class="menu-grid">
+            <button class="btn-menu verde" onclick="irPara('telaCadastrar')">📝 Cadastrar</button>
+            <button class="btn-menu laranja" onclick="irPara('telaPesquisar')">🔍 Pesquisar</button>
+            <button class="btn-menu azul" onclick="irPara('telaBanco')">📊 Banco</button>
+            <button class="btn-menu lilas" onclick="irPara('telaArquivo')">📁 Arquivo</button>
+        </div>
+    </div>
+
+    <div id="telaCadastrar" class="tela tela-cadastrar">
+        <div class="conteudo-branco">
+            <h2>📝 Novo Cadastro</h2>
+            <div class="form-grupo"><label>Matrícula</label><input type="text" id="regMatricula"></div>
+            <div class="form-grupo"><label>Nome Completo</label><input type="text" id="regNome"></div>
+            <div class="form-grupo">
+                <label>Solicitante</label>
+                <select id="regSolicitante">
+                    <option value="">Selecione...</option>
+                    <option>Advogado</option><option>DEECRIM</option><option>Defensoria</option><option>FUNAP</option>
+                </select>
+            </div>
+            <div class="form-grupo"><label>Data Pedido</label><input type="date" id="regDataPedido"></div>
+            <button class="btn-acao verde" onclick="salvarNovo()">✅ Salvar Cadastro</button>
+            <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
+        </div>
+    </div>
+
+    <div id="telaPesquisar" class="tela tela-pesquisar">
+        <div class="conteudo-branco">
+            <h2>🔍 Pesquisar</h2>
+            <input type="text" id="inputBusca" placeholder="Nome ou Matrícula..." oninput="buscar()" style="margin-bottom:20px;">
+            <div id="resultadosBusca"></div>
+            <button class="btn-acao laranja" onclick="irPara('menuPrincipal')">⬅️ Voltar ao Menu</button>
+        </div>
+    </div>
+
+    <div id="telaBanco" class="tela tela-banco">
+        <div class="conteudo-branco">
+            <h2>📊 Banco Ativo</h2>
+            <div style="background: #f0f4f7; padding: 10px; border-radius: 10px; margin-bottom: 10px; display: flex; gap: 5px;">
+                <button class="btn-acao verde" style="font-size: 11px; margin:0; padding:8px;" onclick="exportarBackup()">💾 Backup</button>
+                <button class="btn-acao laranja" style="font-size: 11px; margin:0; padding:8px;" onclick="document.getElementById('inputImport').click()">📂 Abrir</button>
+                <input type="file" id="inputImport" style="display:none" onchange="importarBackup(event)">
+            </div>
+            <div id="listaBanco"></div>
+            <button class="btn-acao azul" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
+        </div>
+    </div>
+
+    <div id="telaArquivo" class="tela tela-arquivo">
+        <div class="conteudo-branco">
+            <h2>📁 Arquivo Morto</h2>
+            <div id="listaArquivo"></div>
+            <button class="btn-acao lilas" onclick="irPara('menuPrincipal')">⬅️ Voltar</button>
+        </div>
+    </div>
+
+    <div id="telaEditar" class="tela tela-banco">
+        <div class="conteudo-branco">
+            <h2>✏️ Atualizar</h2>
+            <input type="hidden" id="editId">
+            <div class="form-grupo"><label>Nome</label><input type="text" id="editNome" disabled style="background:#eee"></div>
+            <div class="form-grupo"><label>Nº Grade</label><input type="text" id="editGrade"></div>
+            <div class="form-grupo"><label>Data Envio</label><input type="date" id="editDataEnvio"></div>
+            <button class="btn-acao verde" onclick="salvarEdicao()">💾 Salvar Alterações</button>
+            <button class="btn-acao lilas" onclick="excluirRegistro()">📁 Mover p/ Arquivo</button>
+            <button class="btn-acao azul" style="background:#7f8c8d" onclick="irPara('menuPrincipal')">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script src="gestao.js"></script>
+</body>
+</html>

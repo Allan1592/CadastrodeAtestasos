@@ -1,0 +1,47 @@
+:root {
+    --grad-menu: linear-gradient(135deg, #eceff1, #cfd8dc);
+    --grad-azul: linear-gradient(135deg, #3498db, #2c3e50);
+    --grad-verde: linear-gradient(135deg, #27ae60, #145a32);
+    --grad-laranja: linear-gradient(135deg, #f39c12, #a04000);
+    --grad-lilas: linear-gradient(135deg, #9b59b6, #4a235a);
+}
+
+body, html { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; min-height: 100vh; }
+
+.container { width: 100%; max-width: 500px; margin: auto; }
+.tela { display: none; padding: 20px; box-sizing: border-box; min-height: 100vh; }
+.tela.ativa { display: block; }
+
+/* Cores de Fundo por Tela */
+#menuPrincipal { background: var(--grad-menu); }
+.tela-cadastrar { background: var(--grad-verde); }
+.tela-pesquisar { background: var(--grad-laranja); }
+.tela-banco { background: var(--grad-azul); }
+.tela-arquivo { background: var(--grad-lilas); }
+
+.conteudo-branco {
+    background: white; border-radius: 20px; padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-top: 15px;
+}
+
+h1 { text-align: center; color: #263238; margin-top: 40px; font-weight: 800; }
+h2 { text-align: center; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding-top: 20px; }
+.btn-menu { 
+    height: 110px; border: none; border-radius: 20px; color: white; 
+    font-weight: bold; display: flex; flex-direction: column; 
+    align-items: center; justify-content: center; cursor: pointer;
+}
+
+.verde { background: var(--grad-verde); }
+.laranja { background: var(--grad-laranja); }
+.azul { background: var(--grad-azul); }
+.lilas { background: var(--grad-lilas); }
+
+.form-grupo { margin-bottom: 15px; }
+label { display: block; font-size: 13px; font-weight: bold; color: #555; }
+input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; }
+
+.btn-acao { width: 100%; padding: 15px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; }
+.card { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 10px; border-left: 6px solid #2c3e50; }
