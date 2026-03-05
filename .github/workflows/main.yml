@@ -10,20 +10,19 @@ jobs:
       - name: Baixando seu Código
         uses: actions/checkout@v4
 
-      - name: Baixando o Motor do App (NW.js)
+      - name: Baixando Motor NWJS
         run: |
           curl -L https://dl.nwjs.io/v0.82.0/nwjs-v0.82.0-win-x64.zip -o nwjs.zip
           Expand-Archive -Path nwjs.zip -DestinationPath .
           Move-Item -Path nwjs-v0.82.0-win-x64 -Destination app_pasta
 
-      - name: Preparando os Arquivos
+      - name: Juntar Arquivos
         run: |
-          # Copia TUDO o que for arquivo do seu projeto para a pasta do app
-          # Isso evita erros de nomes de arquivos individuais
-          Copy-Item -Path * -Destination app_pasta -Exclude "nwjs.zip","app_pasta" -Recurse -ErrorAction Ignore
+          # Este comando copia tudo o que voce tem no GitHub para dentro da pasta do app
+          Get-ChildItem -Exclude "nwjs.zip", "app_pasta", ".github", ".git" | Copy-Item -Destination app_pasta -Recurse
 
-      - name: Disponibilizar para Download
+      - name: Finalizar Download
         uses: actions/upload-artifact@v4
         with:
-          name: Gestao_Offline_Pronta
+          name: Sistema_Gestao_Offline
           path: app_pasta/
