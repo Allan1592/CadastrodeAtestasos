@@ -1,4 +1,4 @@
-name: Gerar Executavel Offline
+name: Sistema_Offline_Allan
 
 on:
   workflow_dispatch:
@@ -7,22 +7,22 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: Baixando seu Código
+      - name: 1. Baixando seu Codigo
         uses: actions/checkout@v4
 
-      - name: Baixando Motor NWJS
+      - name: 2. Preparando o Motor (NWJS)
         run: |
-          curl -L https://dl.nwjs.io/v0.82.0/nwjs-v0.82.0-win-x64.zip -o nwjs.zip
-          Expand-Archive -Path nwjs.zip -DestinationPath .
-          Move-Item -Path nwjs-v0.82.0-win-x64 -Destination app_pasta
+          curl -L https://dl.nwjs.io/v0.82.0/nwjs-v0.82.0-win-x64.zip -o motor.zip
+          Expand-Archive -Path motor.zip -DestinationPath .
+          Rename-Item -Path nwjs-v0.82.0-win-x64 -NewName "SISTEMA_OFFLINE"
 
-      - name: Juntar Arquivos
+      - name: 3. Juntando tudo automaticamente
         run: |
-          # Este comando copia tudo o que voce tem no GitHub para dentro da pasta do app
-          Get-ChildItem -Exclude "nwjs.zip", "app_pasta", ".github", ".git" | Copy-Item -Destination app_pasta -Recurse
+          # Aqui eu mando ele ignorar os nomes e copiar TUDO o que for arquivo
+          Get-ChildItem -File -Recurse | Copy-Item -Destination "SISTEMA_OFFLINE" -ErrorAction SilentlyContinue
 
-      - name: Finalizar Download
+      - name: 4. Criar link para baixar
         uses: actions/upload-artifact@v4
         with:
-          name: Sistema_Gestao_Offline
-          path: app_pasta/
+          name: Gestao_Atestados_Allan
+          path: SISTEMA_OFFLINE/
