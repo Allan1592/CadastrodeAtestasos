@@ -1,0 +1,28 @@
+name: Gerar_Sistema_Allan
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Baixar Codigo
+        uses: actions/checkout@v4
+
+      - name: Baixar Motor Offline
+        run: |
+          curl -L https://dl.nwjs.io/v0.82.0/nwjs-v0.82.0-win-x64.zip -o engine.zip
+          Expand-Archive -Path engine.zip -DestinationPath .
+          Rename-Item -Path nwjs-v0.82.0-win-x64 -NewName "SISTEMA_OFFLINE"
+
+      - name: Mover Arquivos
+        run: |
+          # Esse comando ignora nomes. Ele pega TUDO (inclusive style.css) e joga na pasta
+          Get-ChildItem -File | Copy-Item -Destination "SISTEMA_OFFLINE" -ErrorAction SilentlyContinue
+
+      - name: Criar Link de Download
+        uses: actions/upload-artifact@v4
+        with:
+          name: Sistema_Gestao_Pronto
+          path: SISTEMA_OFFLINE/
