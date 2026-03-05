@@ -1,7 +1,7 @@
 name: Gerar Executavel Offline
 
 on:
-  workflow_dispatch: # Para você apertar o botão de Play
+  workflow_dispatch:
 
 jobs:
   build:
@@ -13,23 +13,14 @@ jobs:
       - name: Baixando o Motor do App (NW.js)
         run: |
           curl -L https://dl.nwjs.io/v0.82.0/nwjs-v0.82.0-win-x64.zip -o nwjs.zip
-          expand-archive -path nwjs.zip -destinationpath .
-          mv nwjs-v0.82.0-win-x64 app_pasta
+          Expand-Archive -Path nwjs.zip -DestinationPath .
+          Move-Item -Path nwjs-v0.82.0-win-x64 -Destination app_pasta
 
       - name: Preparando os Arquivos
         run: |
-          # Move seus arquivos para dentro da pasta do app
-          cp index.html app_pasta/
-          cp gestao.js app_pasta/
-          cp estilo.css app_pasta/
-          cp manifest.json app_pasta/
-          cp ícone.png app_pasta/
-
-      - name: Criando o Pacote Final
-        run: |
-          cd app_pasta
-          # Transforma a pasta em um executavel compacto
-          copy /b nw.exe+index.html gestao_offline.exe
+          # Copia TUDO o que for arquivo do seu projeto para a pasta do app
+          # Isso evita erros de nomes de arquivos individuais
+          Copy-Item -Path * -Destination app_pasta -Exclude "nwjs.zip","app_pasta" -Recurse -ErrorAction Ignore
 
       - name: Disponibilizar para Download
         uses: actions/upload-artifact@v4
