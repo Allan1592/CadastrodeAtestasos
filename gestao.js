@@ -1,48 +1,34 @@
 "use strict";
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBMoZOnyrkeNbLdBim6O3rO3vJHyxgNxXSmhcHPKoC6bjZqjRPcr8lAYl50gdHpYBr/exec"; 
-const UNIDADE_NOME = "UNIDADE_01"; 
+
+// IMPORTANTE: Esses comandos permitem que o programa escreva no seu HD
+const fs = require('fs');
+const path = require('path');
+const DB_PATH = path.join(process.cwd(), 'banco_dados.json');
 
 let db = [];
 
+// Função que lê o arquivo no HD assim que o programa abre
 function carregarDados() {
-    const dadosSalvos = localStorage.getItem('meu_sistema_db');
-    if (dadosSalvos) {
-        try { db = JSON.parse(dadosSalvos); } catch (e) { db = []; }
-    }
-}
-
-function salvarNoStorage() {
-    localStorage.setItem('meu_sistema_db', JSON.stringify(db));
-    sincronizarComGoogle();
-}
-
-async function sincronizarComGoogle() {
-    const statusEl = document.getElementById('statusSync');
-    const dadosParaEnviar = db.filter(r => !r.sincronizado && !r.enviando);
-    
-    if (dadosParaEnviar.length === 0) {
-        if(statusEl) statusEl.innerText = "✓ Sistema Pronto";
-        return;
-    }
-
-    if(statusEl) statusEl.innerText = "⏳ Sincronizando...";
-
-    for (let registro of dadosParaEnviar) {
-        registro.enviando = true; 
-        try {
-            await fetch(SCRIPT_URL, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ...registro, unidade: UNIDADE_NOME })
-            });
-            registro.sincronizado = true;
-            delete registro.enviando;
-        } catch (e) {
-            delete registro.enviando;
+    try {
+        if (fs.existsSync(DB_PATH)) {
+            const data = fs.readFileSync(DB_PATH, 'utf8');
+            db = JSON.parse(data);
+        } else {
+            db = [];
+            salvarNoDisco(); 
         }
+    } catch (e) {
+        db = [];
     }
-    localStorage.setItem('meu_sistema_db', JSON.stringify(db));
+}
+
+// Função que salva os dados no arquivo JSON na pasta do programa
+function salvarNoDisco() {
+    try {
+        fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2));
+    } catch (e) {
+        alert("Erro ao salvar no computador: " + e);
+    }
 }
 
 function irPara(idTela) {
@@ -56,7 +42,6 @@ function irPara(idTela) {
         }
         if(idTela === 'telaBanco') listarBanco();
         if(idTela === 'telaArquivo') listarArquivo();
-        if(idTela === 'menuPrincipal') sincronizarComGoogle();
     }
 }
 
@@ -83,12 +68,11 @@ function salvarNovo() {
         tipoAtestado: document.getElementById('regTipo').value,
         grade: document.getElementById('regGrade').value,
         dataEnvio: document.getElementById('regDataEnvio').value,
-        ativo: true,
-        sincronizado: false
+        ativo: true
     };
     db.push(novo);
-    salvarNoStorage();
-    alert("✅ Salvo!");
+    salvarNoDisco();
+    alert("✅ Salvo no Computador!");
     document.querySelectorAll('#telaCadastrar input, #telaCadastrar select').forEach(i => i.value = "");
     irPara('menuPrincipal');
 }
@@ -149,10 +133,9 @@ function salvarEdicao() {
             dataPedido: document.getElementById('editDataPedido').value,
             tipoAtestado: document.getElementById('editTipo').value,
             grade: document.getElementById('editGrade').value,
-            dataEnvio: document.getElementById('editDataEnvio').value,
-            sincronizado: false 
+            dataEnvio: document.getElementById('editDataEnvio').value
         };
-        salvarNoStorage();
+        salvarNoDisco();
         alert("✅ Atualizado!");
         irPara('telaPesquisar');
     }
@@ -163,8 +146,7 @@ function excluirRegistro() {
     if (confirm("Mover para o Arquivo Morto?")) {
         const i = db.findIndex(item => item.id === id);
         db[i].ativo = false;
-        db[i].sincronizado = false;
-        salvarNoStorage();
+        salvarNoDisco();
         irPara('telaPesquisar');
     }
 }
@@ -175,7 +157,7 @@ function listarBanco() {
     db.filter(r => r.ativo).forEach(r => {
         const d = document.createElement('div');
         d.className = 'card-consulta';
-        d.innerHTML = `<div><strong>${r.nome.toUpperCase()}</strong></div><div>${r.sincronizado ? '☁️' : '⏳'}</div>`;
+        d.innerHTML = `<div><strong>${r.nome.toUpperCase()}</strong></div><div>💻 Local</div>`;
         area.appendChild(d);
     });
 }
@@ -194,49 +176,17 @@ function listarArquivo() {
 function restaurar(id) {
     const i = db.findIndex(r => r.id === id);
     db[i].ativo = true;
-    db[i].sincronizado = false;
-    salvarNoStorage();
+    salvarNoDisco();
     irPara('telaArquivo');
 }
 
-// FUNÇÕES DE MANUTENÇÃO
-function exportarBackup() {
-    const blob = new Blob([JSON.stringify(db)], {type: "application/json"});
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    const data = new Date().toLocaleDateString().replace(/\//g, '-');
-    a.download = `backup_atestados_${data}.json`;
-    a.click();
-}
+// Torna as funções visíveis para o HTML
+window.irPara = irPara; 
+window.salvarNovo = salvarNovo; 
+window.salvarEdicao = salvarEdicao;
+window.excluirRegistro = excluirRegistro; 
+window.buscar = buscar;
+window.restaurar = restaurar;
 
-function importarBackup(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        try {
-            const dados = JSON.parse(e.target.result);
-            if (confirm("Isso substituirá sua lista atual. Continuar?")) {
-                db = dados;
-                localStorage.setItem('meu_sistema_db', JSON.stringify(db));
-                alert("✅ Backup restaurado!");
-                irPara('menuPrincipal');
-            }
-        } catch(err) { alert("❌ Arquivo inválido."); }
-    };
-    reader.readAsText(file);
-}
-
-function limparSistemaTotal() {
-    if (confirm("🚨 ATENÇÃO: Isso apaga todos os registros da pesquisa (tela). A planilha Google NÃO é afetada. Deseja resetar?")) {
-        db = [];
-        localStorage.removeItem('meu_sistema_db');
-        alert("Sistema limpo!");
-        location.reload();
-    }
-}
-
-window.irPara = irPara; window.salvarNovo = salvarNovo; window.salvarEdicao = salvarEdicao;
-window.excluirRegistro = excluirRegistro; window.buscar = buscar;
-window.exportarBackup = exportarBackup; window.importarBackup = importarBackup; 
-window.limparSistemaTotal = limparSistemaTotal; window.restaur
+// Inicia o sistema carregando os dados do HD
+carregarDados();
