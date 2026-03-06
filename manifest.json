@@ -1,16 +1,14 @@
 {
-  "short_name": "Atestados",
-  "name": "Controle de Atestados",
-  "icons": [
-    {
-      "src": "icone.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "start_url": "./index.html",
-  "display": "standalone",
-  "theme_color": "#2c3e50",
-  "background_color": "#cfd8dc"
+  "name": "Sistema_Atestados_Local",
+  "main": "index.html",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "nodejs": true,
+  "window": {
+    "title": "Gestão de Atestados CTE",
+    "width": 1100,
+    "height": 800,
+    "position": "center",
+    "toolbar": false
+  }
 }
